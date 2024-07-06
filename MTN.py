@@ -12,7 +12,6 @@ import spacy
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 import nltk
-nltk.download('punkt')
 from pytrends.request import TrendReq
 from pytrends.exceptions import TooManyRequestsError, ResponseError
 
