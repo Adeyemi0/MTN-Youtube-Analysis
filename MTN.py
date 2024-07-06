@@ -375,12 +375,24 @@ def page_eda():
         plt.clf()
         
         return keywords_performance
-
+        
+    
     # Analyze title keywords for each category
     st.write('### Title Keywords Analysis')
     viral_keywords_performance = analyze_title_keywords(df, 'Viral Video')
     moderate_keywords_performance = analyze_title_keywords(df, 'Moderately Successful Video')
     low_keywords_performance = analyze_title_keywords(df, 'Low Performing Video')
+
+    def download_punkt():
+        try:
+            nltk.data.find('tokenizer/punkt')
+        except LookupError:
+            nltk.download('punkt')
+            
+    # Download NLTK punkt
+    download_punkt()
+   
+    punkt_dir = nltk.data.find('tokenizer/punkt')
 
     # Function to extract entities and filter out unwanted ones
     def extract_entities(text):
