@@ -193,8 +193,8 @@ def page_eda():
     nltk_data_path = '/path/to/nltk_data'
 
    # Create the directory if it doesn't exist
-   if not os.path.exists(nltk_data_path):
-       os.makedirs(nltk_data_path)
+    if not os.path.exists(nltk_data_path):
+        os.makedirs(nltk_data_path)
 
 # Append the custom NLTK data path
 nltk.data.path.append(nltk_data_path)
