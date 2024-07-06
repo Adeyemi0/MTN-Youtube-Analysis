@@ -22,8 +22,7 @@ st.set_option('deprecation.showPyplotGlobalUse', False)
 
 nlp = spacy.load("en_core_web_sm")
 
-# Download NLTK stopwords
-nltk.download('stopwords')
+nltk.data.path.append('/path/to/nltk_data') 
 
 # Load the dataset
 df = pd.read_csv("mtn_nigeria_youtube_video_details.csv")
