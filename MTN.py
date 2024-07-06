@@ -21,6 +21,11 @@ import warnings
 warnings.filterwarnings('ignore')
 st.set_option('deprecation.showPyplotGlobalUse', False)
 
+# Check if the spaCy model is already installed
+if 'en_core_web_sm' not in spacy.util.get_installed_models():
+    print("Downloading spaCy model 'en_core_web_sm'...")
+    os.system('python -m spacy download en_core_web_sm')
+
 # Load the Spacy language model for NLP tasks
 nlp = spacy.load("en_core_web_sm")
 
