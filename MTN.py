@@ -22,7 +22,6 @@ st.set_option('deprecation.showPyplotGlobalUse', False)
 
 nlp = spacy.load("en_core_web_sm")
 
-nltk.data.path.append('/path/to/nltk_data') 
 
 # Load the dataset
 df = pd.read_csv("mtn_nigeria_youtube_video_details.csv")
@@ -186,11 +185,21 @@ def page_eda():
     sns.boxplot(data=df, x='Hour of Day', y='View Count')
     st.pyplot()
     st.write("Investigated the impact of publishing time on view counts.")
+    # Add nltk_data directory to the NLTK data path
+    nltk.data.path.append('./nltk_data')
 
-    # Keyword Frequency in Titles and Descriptions
-    st.subheader("Keyword Frequency in Titles and Descriptions")
-    nltk_data_dir = '/path/to/your/nltk_data'
-    nltk.data.path.append(nltk_data_dir)
+    # Function to check and download NLTK resources if necessary
+    def download_nltk_resources():
+        try:
+            nltk.data.find('corpora/stopwords')
+        except LookupError:
+            nltk.download('stopwords')
+            
+    # Download NLTK resources
+    download_nltk_resources()
+    # Set the path to the stopwords directory
+    stopwords_dir = os.path.join(nltk.data.find('corpora'), 'stopwords')
+
     stop_words = set(stopwords.words('english'))
     df['Title'] = df['Title'].astype(str).str.lower().str.replace('mtn', '')
     df['Description'] = df['Description'].astype(str).str.lower().str.replace('mtn', '')
