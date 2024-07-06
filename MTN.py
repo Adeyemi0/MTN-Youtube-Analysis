@@ -20,10 +20,7 @@ import warnings
 warnings.filterwarnings('ignore')
 st.set_option('deprecation.showPyplotGlobalUse', False)
 
-
 nlp = spacy.load("en_core_web_sm")
-
-from nltk.corpus import stopwords
 
 # Download NLTK stopwords
 nltk.download('stopwords')
