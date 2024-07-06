@@ -192,12 +192,12 @@ def page_eda():
     # Specify the path for NLTK data
     nltk_data_path = '/path/to/nltk_data'
 
-   # Create the directory if it doesn't exist
+    # Create the directory if it doesn't exist
     if not os.path.exists(nltk_data_path):
         os.makedirs(nltk_data_path)
 
-# Append the custom NLTK data path
-nltk.data.path.append(nltk_data_path)
+   # Append the custom NLTK data path
+    nltk.data.path.append(nltk_data_path)
     nltk.download('stopwords', download_dir=nltk_data_path)
     stop_words = set(stopwords.words('english'))
     df['Title'] = df['Title'].astype(str).str.lower().str.replace('mtn', '')
