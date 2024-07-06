@@ -198,7 +198,7 @@ def page_eda():
     # Download NLTK resources
     download_nltk_resources()
     # Set the path to the stopwords directory
-    stopwords_dir = os.path.join(nltk.data.find('corpora'), 'stopwords')
+    stopwords_dir = nltk.data.find('corpora/stopwords')
 
     stop_words = set(stopwords.words('english'))
     df['Title'] = df['Title'].astype(str).str.lower().str.replace('mtn', '')
