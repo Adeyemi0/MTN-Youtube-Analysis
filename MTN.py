@@ -21,7 +21,7 @@ warnings.filterwarnings('ignore')
 st.set_option('deprecation.showPyplotGlobalUse', False)
 
 nlp = spacy.load("en_core_web_sm")
-nltk.download('punkt')
+
 
 # Load the dataset
 df = pd.read_csv("mtn_nigeria_youtube_video_details.csv")
