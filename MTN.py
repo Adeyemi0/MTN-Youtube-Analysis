@@ -21,7 +21,7 @@ warnings.filterwarnings('ignore')
 st.set_option('deprecation.showPyplotGlobalUse', False)
 
 nlp = spacy.load("en_core_web_sm")
-
+nltk.download('punkt')
 
 # Load the dataset
 df = pd.read_csv("mtn_nigeria_youtube_video_details.csv")
@@ -383,16 +383,6 @@ def page_eda():
     moderate_keywords_performance = analyze_title_keywords(df, 'Moderately Successful Video')
     low_keywords_performance = analyze_title_keywords(df, 'Low Performing Video')
 
-    def download_punkt():
-        try:
-            nltk.data.find('tokenizer/punkt')
-        except LookupError:
-            nltk.download('punkt')
-            
-    # Download NLTK punkt
-    download_punkt()
-   
-    punkt_dir = nltk.data.find('tokenizer/punkt')
 
     # Function to extract entities and filter out unwanted ones
     def extract_entities(text):
