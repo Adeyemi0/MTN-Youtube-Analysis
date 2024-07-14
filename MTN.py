@@ -488,6 +488,65 @@ def page_trends():
     - **Cyclically Interested**: Plan your content schedule to align with peaks in interest to maximize engagement.
     """)
 
+    def categorize_keyword_trend(kw):
+    pytrends.build_payload([kw], timeframe='today 5-y', geo='NG')
+    df_trends = pytrends.interest_over_time()
+    if df_trends.empty:
+        st.write(f'No data available for keyword: {kw}')
+        return None
+
+    mean = round(df_trends[kw].mean(), 2)
+    avg_last_year = round(df_trends[kw][-52:].mean(), 2)
+    avg_first_year = round(df_trends[kw][:52].mean(), 2)
+    trend = round(((avg_last_year / mean) - 1) * 100, 2)
+    trend2 = round(((avg_last_year / avg_first_year) - 1) * 100, 2)
+
+    st.write(f'The average 5 years interest of "{kw}" was {mean}')
+    st.write(f'The last year interest of "{kw}" compared to the last 5 years has changed by {trend}%')
+
+    if mean > 75 and abs(trend) <= 5:
+        stability = 'stable in the last 5 years.'
+    elif mean > 75 and trend > 10:
+        stability = 'stable and increasing in the last 5 years.'
+    elif mean > 75 and trend < -10:
+        stability = 'stable and decreasing in the last 5 years.'
+    elif mean > 60 and abs(trend) <= 15:
+        stability = 'relatively stable in the last 5 years.'
+    elif mean > 60 and trend > 15:
+        stability = 'relatively stable and increasing in the last 5 years.'
+    elif mean > 60 and trend < -15:
+        stability = 'relatively stable and decreasing in the last 5 years.'
+    elif mean > 20 and abs(trend) <= 15:
+        stability = 'seasonal.'
+    elif mean > 20 and trend > 15:
+        stability = 'trending.'
+    elif mean > 20 and trend < -15:
+        stability = 'significantly decreasing.'
+    elif mean > 5 and abs(trend) <= 15:
+        stability = 'cyclical.'
+    elif mean > 0 and trend > 15:
+        stability = 'new and trending.'
+    elif mean > 0 and trend < -15:
+        stability = 'decreasing and not comparable to its peak.'
+    else:
+        stability = 'something to be checked.'
+
+    st.write(f'The interest for "{kw}" is {stability}')
+
+    if avg_first_year == 0:
+        st.write(f'"{kw}" did not exist 5 years ago.')
+    elif trend2 > 15:
+        st.write(f'The last year interest is quite higher compared to 5 years ago. It has increased by {trend2}%')
+    elif trend2 < -15:
+        st.write(f'The last year interest is quite lower compared to 5 years ago. It has decreased by {trend2}%')
+    else:
+        st.write(f'The last year interest is comparable to 5 years ago. It has changed by {trend2}%')
+
+    st.write('')
+
+    return {'Keyword': kw, 'Mean': mean, 'Trend': trend, 'Trend2': trend2, 'Stability': stability}
+
+
     # Request keywords for trend analysis
     keywords = st.text_area("Enter keywords to compare, separated by commas:", "MTN Nigeria, Airtel Nigeria")
     keywords = [keyword.strip() for keyword in keywords.split(',')]
@@ -505,6 +564,43 @@ def page_trends():
                 interest_over_time = pytrends.interest_over_time()
                 if not interest_over_time.empty:
                     st.line_chart(interest_over_time.drop(columns=['isPartial']))
+
+                    timeframes = ['today 5-y', 'today 12-m', 'today 3-m', 'today 1-m']
+                    keyword_data = []
+                    for kw in keywords:
+                        result = categorize_keyword_trend(kw)
+                        if result:
+                            keyword_data.append(result)
+                    if keyword_data:
+                        keyword_df = pd.DataFrame(keyword_data)
+                        st.write("### Keyword Trends Data")
+                        st.dataframe(keyword_df)
+                        
+                        plt.figure(figsize=(14, 8))
+                        sns.barplot(data=keyword_df, x='Keyword', y='Trend')
+                        plt.title('Keyword Trend in the Last Year Compared to 5 Years Average')
+                        plt.xlabel('Keyword')
+                        plt.ylabel('Trend (%)')
+                        plt.xticks(rotation=45, ha='right')
+                        st.pyplot(plt)
+                        
+                        plt.figure(figsize=(14, 8))
+                        sns.barplot(data=keyword_df, x='Keyword', y='Trend2')
+                        plt.title('Keyword Trend in the Last Year Compared to 5 Years Ago')
+                        plt.xlabel('Keyword')
+                        plt.ylabel('Trend2 (%)')
+                        plt.xticks(rotation=45, ha='right')
+                        st.pyplot(plt)
+                        
+                        plt.figure(figsize=(14, 8))
+                        sns.barplot(data=keyword_df, x='Keyword', y='Mean')
+                        plt.title('Average Interest of Keywords Over the Last 5 Years')
+                        plt.xlabel('Keyword')
+                        plt.ylabel('Mean Interest')
+                        plt.xticks(rotation=45, ha='right')
+                        st.pyplot(plt)
+                else:
+                    st.write("No valid data found for the entered keywords.")
 
                     # Interest by region
                     st.subheader("Interest by Region")
