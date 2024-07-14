@@ -489,62 +489,61 @@ def page_trends():
     """)
 
     def categorize_keyword_trend(kw):
-    pytrends.build_payload([kw], timeframe='today 5-y', geo='NG')
-    df_trends = pytrends.interest_over_time()
-    if df_trends.empty:
-        st.write(f'No data available for keyword: {kw}')
-        return None
-
-    mean = round(df_trends[kw].mean(), 2)
-    avg_last_year = round(df_trends[kw][-52:].mean(), 2)
-    avg_first_year = round(df_trends[kw][:52].mean(), 2)
-    trend = round(((avg_last_year / mean) - 1) * 100, 2)
-    trend2 = round(((avg_last_year / avg_first_year) - 1) * 100, 2)
-
-    st.write(f'The average 5 years interest of "{kw}" was {mean}')
-    st.write(f'The last year interest of "{kw}" compared to the last 5 years has changed by {trend}%')
-
-    if mean > 75 and abs(trend) <= 5:
-        stability = 'stable in the last 5 years.'
-    elif mean > 75 and trend > 10:
-        stability = 'stable and increasing in the last 5 years.'
-    elif mean > 75 and trend < -10:
-        stability = 'stable and decreasing in the last 5 years.'
-    elif mean > 60 and abs(trend) <= 15:
-        stability = 'relatively stable in the last 5 years.'
-    elif mean > 60 and trend > 15:
-        stability = 'relatively stable and increasing in the last 5 years.'
-    elif mean > 60 and trend < -15:
-        stability = 'relatively stable and decreasing in the last 5 years.'
-    elif mean > 20 and abs(trend) <= 15:
-        stability = 'seasonal.'
-    elif mean > 20 and trend > 15:
-        stability = 'trending.'
-    elif mean > 20 and trend < -15:
-        stability = 'significantly decreasing.'
-    elif mean > 5 and abs(trend) <= 15:
-        stability = 'cyclical.'
-    elif mean > 0 and trend > 15:
-        stability = 'new and trending.'
-    elif mean > 0 and trend < -15:
-        stability = 'decreasing and not comparable to its peak.'
-    else:
-        stability = 'something to be checked.'
-
-    st.write(f'The interest for "{kw}" is {stability}')
-
-    if avg_first_year == 0:
-        st.write(f'"{kw}" did not exist 5 years ago.')
-    elif trend2 > 15:
-        st.write(f'The last year interest is quite higher compared to 5 years ago. It has increased by {trend2}%')
-    elif trend2 < -15:
-        st.write(f'The last year interest is quite lower compared to 5 years ago. It has decreased by {trend2}%')
-    else:
-        st.write(f'The last year interest is comparable to 5 years ago. It has changed by {trend2}%')
-
-    st.write('')
-
-    return {'Keyword': kw, 'Mean': mean, 'Trend': trend, 'Trend2': trend2, 'Stability': stability}
+        pytrends.build_payload([kw], timeframe='today 5-y', geo='NG')
+        df_trends = pytrends.interest_over_time()
+        if df_trends.empty:
+            st.write(f'No data available for keyword: {kw}')
+            return None
+        
+        mean = round(df_trends[kw].mean(), 2)
+        avg_last_year = round(df_trends[kw][-52:].mean(), 2)
+        avg_first_year = round(df_trends[kw][:52].mean(), 2)
+        trend = round(((avg_last_year / mean) - 1) * 100, 2)
+        trend2 = round(((avg_last_year / avg_first_year) - 1) * 100, 2)
+        st.write(f'The average 5 years interest of "{kw}" was {mean}')
+        st.write(f'The last year interest of "{kw}" compared to the last 5 years has changed by {trend}%')
+        
+        if mean > 75 and abs(trend) <= 5:
+            stability = 'stable in the last 5 years.'
+        elif mean > 75 and trend > 10:
+            stability = 'stable and increasing in the last 5 years.'
+        elif mean > 75 and trend < -10:
+            stability = 'stable and decreasing in the last 5 years.'
+        elif mean > 60 and abs(trend) <= 15:
+            stability = 'relatively stable in the last 5 years.'
+        elif mean > 60 and trend > 15:
+            stability = 'relatively stable and increasing in the last 5 years.'
+        elif mean > 60 and trend < -15:
+            stability = 'relatively stable and decreasing in the last 5 years.'
+        elif mean > 20 and abs(trend) <= 15:
+            stability = 'seasonal.'
+        elif mean > 20 and trend > 15:
+            stability = 'trending.'
+        elif mean > 20 and trend < -15:
+            stability = 'significantly decreasing.'
+        elif mean > 5 and abs(trend) <= 15:
+            stability = 'cyclical.'
+        elif mean > 0 and trend > 15:
+            stability = 'new and trending.'
+        elif mean > 0 and trend < -15:
+            stability = 'decreasing and not comparable to its peak.'
+        else:
+            stability = 'something to be checked.'
+            
+        st.write(f'The interest for "{kw}" is {stability}')
+        
+        if avg_first_year == 0:
+            st.write(f'"{kw}" did not exist 5 years ago.')
+        elif trend2 > 15:
+            st.write(f'The last year interest is quite higher compared to 5 years ago. It has increased by {trend2}%')
+        elif trend2 < -15:
+            st.write(f'The last year interest is quite lower compared to 5 years ago. It has decreased by {trend2}%')
+        else:
+            st.write(f'The last year interest is comparable to 5 years ago. It has changed by {trend2}%')
+            
+        st.write('')
+        
+        return {'Keyword': kw, 'Mean': mean, 'Trend': trend, 'Trend2': trend2, 'Stability': stability}
 
 
     # Request keywords for trend analysis
