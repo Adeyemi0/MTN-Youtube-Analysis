@@ -614,9 +614,6 @@ def page_trends():
                         st.write(related_queries[kw]['top'])
                         st.write(f"Rising queries for '{kw}':")
                         st.write(related_queries[kw]['rising'])
-                else:
-                    st.write("No trends data found for the selected keywords. Try different keywords or check back later.")
-                break  # Exit the loop if successful
 
             except TooManyRequestsError:
                 if attempt < retry_attempts - 1:
