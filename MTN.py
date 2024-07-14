@@ -545,7 +545,6 @@ def page_trends():
         
         return {'Keyword': kw, 'Mean': mean, 'Trend': trend, 'Trend2': trend2, 'Stability': stability}
 
-
     # Request keywords for trend analysis
     keywords = st.text_area("Enter keywords to compare, separated by commas:", "MTN Nigeria, Airtel Nigeria")
     keywords = [keyword.strip() for keyword in keywords.split(',')]
@@ -614,6 +613,8 @@ def page_trends():
                         st.write(related_queries[kw]['top'])
                         st.write(f"Rising queries for '{kw}':")
                         st.write(related_queries[kw]['rising'])
+
+                break  # Exit the loop if everything went well
 
             except TooManyRequestsError:
                 if attempt < retry_attempts - 1:
